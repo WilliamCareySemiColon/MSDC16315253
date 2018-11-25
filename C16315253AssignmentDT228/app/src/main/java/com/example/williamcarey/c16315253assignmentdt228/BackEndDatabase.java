@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class BackEndDatabase {
-    //database working with and the version
+    //database working with and the version we are working with
     private static final String DATABASE_NAME 	= "MusicSite";
     private static final int DATABASE_VERSION 	= 1;
     //Person inside the database
@@ -50,9 +50,10 @@ public class BackEndDatabase {
     SQL statement to create the database in different strings
     ****************************************************************/
     private static final String DATABASE_CREATE1 =
-            "create table Person( username text primary key not null, " +
-            "password text not null, name text not null, "  +
-            "email text not null, address text not null);";
+            "create table Person( _id integer primary key autoincrement," +
+            "username text primary key not null,password text not null," +
+                    " name text not null,email text not null," +
+                    " address text not null,profilePic BLOB NOT NULL);";
 
     private static final String DATABASE_CREATE2 =
             "create table Product( _id integer primary key not null, " +
@@ -89,20 +90,19 @@ public class BackEndDatabase {
     public BackEndDatabase(Context ctx)
     {
         //
-        this.context 	= ctx;
-        DBHelper 		= new DatabaseHelper(context);
+        this.context = ctx;
+        DBHelper = new DatabaseHelper(context);
     }
 
     public BackEndDatabase open() throws SQLException
     {
-        db     = DBHelper.getWritableDatabase();
+        db = DBHelper.getWritableDatabase();
         return this;
     }
 
     // nested dB helper class
     private static class DatabaseHelper extends SQLiteOpenHelper
     {
-        //
         DatabaseHelper(Context context)
         {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -110,7 +110,6 @@ public class BackEndDatabase {
 
 
         @Override
-        //
         public void onCreate(SQLiteDatabase db)
         {
 
@@ -118,7 +117,6 @@ public class BackEndDatabase {
         }
 
         @Override
-        //
         public void onUpgrade(SQLiteDatabase db, int oldVersion,
                               int newVersion)
         {
@@ -136,22 +134,20 @@ public class BackEndDatabase {
     }
 
     public long insertPerson(String username, String password, String name,
-                             String addressLine1, String addressLine2,
-                             String addressLine3, String email)
+                             String addressLine, String email)
     {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_USERNAME, username);
         initialValues.put(KEY_PASSWORD, password);
         initialValues.put(KEY_NAME, name);
-        initialValues.put(KEY_ADDRESS, addressLine1 + " " + addressLine2 + " " +
-                            addressLine3);
+        initialValues.put(KEY_ADDRESS, addressLine);
         initialValues.put(KEY_EMAIL,email);
         return db.insert(DATABASE_TABLE_PERSON, null, initialValues);
     }
 
     public boolean deletePerson(String username)
     {
-        //
+
         return db.delete(DATABASE_TABLE_PERSON, KEY_USERNAME +
                 "=" + username, null) > 0;
     }
@@ -192,14 +188,13 @@ public class BackEndDatabase {
 
     //
     public boolean updatePerson(String username, String password, String name,
-                                String addressLine1, String addressLine2,
-                                String addressLine3, String email)
+                                String addressLine, String email)
     {
         ContentValues args = new ContentValues();
         args.put(KEY_PASSWORD, password);
         args.put(KEY_NAME, name);
         args.put(KEY_EMAIL,email);
-        args.put(KEY_ADDRESS,addressLine1 + " " + addressLine2 + " " + addressLine3);
+        args.put(KEY_ADDRESS,addressLine);
         return db.update(DATABASE_TABLE_PERSON, args,
                 KEY_USERNAME + "=" + username, null) > 0;
     }
