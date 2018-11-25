@@ -105,11 +105,18 @@ public class MainActivity extends Activity implements View.OnClickListener
             newPerson = BEDB.insertPerson(this.username,this.password,this.name,
                     this.address,this.email);
         }
+
+        public BackEndDatabase retDB() {
+            return BEDB;
+        }
     }
 
-    /*@Override
+    @Override
     public void onDestroy()
     {
         super.onDestroy();
-    }*/
+
+        BackEndDatabase db = person.retDB();
+        db.close();
+    }
 }
