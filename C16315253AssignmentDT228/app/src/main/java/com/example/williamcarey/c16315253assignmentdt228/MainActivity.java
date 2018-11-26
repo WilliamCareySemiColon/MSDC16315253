@@ -1,6 +1,7 @@
 package com.example.williamcarey.c16315253assignmentdt228;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -71,52 +72,12 @@ public class MainActivity extends Activity implements View.OnClickListener
                     textfields[3].getText().toString(),
                     textfields[4].getText().toString(),
                     textfields[5].getText().toString(),
-                    textfields[6].getText().toString());
+                    textfields[6].getText().toString(),
+                    getApplicationContext());
 
             Toast.makeText(getApplicationContext(),
                     "You have pressed the register button",
                     Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public class Person {
-
-        private String name,address,username,email, password;
-        //allow connection to the database
-        private BackEndDatabase BEDB;
-
-        //insertion of data into the database
-        long newPerson;
-
-        //register constructor
-        public Person(String name, String address1, String address2,String address3,
-                      String email,String username, String password )
-        {
-            //setting the fields to have data
-            this.name = name;
-            this.address = address1 + " " + address2 + " " + address3;
-            this.username = username;
-            this.email = email;
-            this.password = password;
-
-            BEDB = new BackEndDatabase(getApplicationContext());
-            BEDB.open();
-
-            newPerson = BEDB.insertPerson(this.username,this.password,this.name,
-                    this.address,this.email);
-        }
-
-        public BackEndDatabase retDB() {
-            return BEDB;
-        }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-
-        BackEndDatabase db = person.retDB();
-        db.close();
     }
 }

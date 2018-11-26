@@ -30,6 +30,7 @@ public class BackEndDatabase {
     private static final String KEY_ID = "_id";
     private static final String KEY_DESC = "description";
     private static final String KEY_REVIEW = "generalReview";
+    private static final String KEY_BOUGHT = "isBought";
     //table media takes after Product
     private static final String DATABASE_TABLE_MEDIA = "Media";
     //associated column
@@ -60,7 +61,7 @@ public class BackEndDatabase {
                     "name text not null, brand text not null, " +
                     "keyword text not null, type text not null" +
                     "dateReleased text not null, description text not null," +
-                    "gerneralReview text not null);";
+                    "gerneralReview text not null, isBought integer not null);";
 
     private static final String DATABASE_CREATE3 =
             "create table Instruments ( _id integer primary key not null, " +
@@ -100,6 +101,11 @@ public class BackEndDatabase {
         return this;
     }
 
+    public void close()
+    {
+        DBHelper.close();
+    }
+
     // nested dB helper class
     private static class DatabaseHelper extends SQLiteOpenHelper
     {
@@ -125,13 +131,10 @@ public class BackEndDatabase {
         }
     }   // end nested class
 
-
-
-    // remainder of the Database Example methods to "use" the database
-    public void close()
-    {
-        DBHelper.close();
-    }
+    /***************************************************************
+     * Database connections to get access to the person content
+     * inside the database
+     **************************************************************/
 
     public long insertPerson(String username, String password, String name,
                              String addressLine, String email)
@@ -158,7 +161,7 @@ public class BackEndDatabase {
                         {
                                 KEY_USERNAME,
                                 KEY_PASSWORD,
-                                KEY_PASSWORD,
+                                KEY_NAME,
                                 KEY_EMAIL,
                                 KEY_ADDRESS
                         },
@@ -172,7 +175,7 @@ public class BackEndDatabase {
                                 {
                                         KEY_USERNAME,
                                         KEY_PASSWORD,
-                                        KEY_PASSWORD,
+                                        KEY_NAME,
                                         KEY_EMAIL,
                                         KEY_ADDRESS
                                 },
@@ -198,4 +201,69 @@ public class BackEndDatabase {
         return db.update(DATABASE_TABLE_PERSON, args,
                 KEY_USERNAME + "=" + username, null) > 0;
     }
+
+    /*********************************************************************************
+     * Database access to the Product tables
+     ******************************************************************************/
+
+    public Cursor getAllProduct()
+    {
+        return db.query(DATABASE_TABLE_PRODUCT, new String[]
+                        {
+                                KEY_NAME,
+                                KEY_BRAND,
+                                KEY_WORD,
+                                KEY_TYPE,
+                                KEY_DATERELEASED,
+                                KEY_PRICE,
+                                KEY_ID,
+                                KEY_DESC,
+                                KEY_REVIEW,
+                                KEY_BOUGHT
+                        },
+                null, null, null, null, null);
+    }
+
+    public Cursor getProduct(int id) throws SQLException
+    {
+        Cursor mCursor =
+                db.query(true, DATABASE_TABLE_PRODUCT, new String[]
+                                {
+                                        KEY_NAME,
+                                        KEY_BRAND,
+                                        KEY_WORD,
+                                        KEY_TYPE,
+                                        KEY_DATERELEASED,
+                                        KEY_PRICE,
+                                        KEY_ID,
+                                        KEY_DESC,
+                                        KEY_REVIEW,
+                                        KEY_BOUGHT
+                                },
+                        KEY_ID + "=" + id,
+                        null, null, null, null, null);
+
+        if (mCursor != null)
+        {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
+    }
+
+    //
+    public boolean updateProduct(String name , String brand, String keyword,
+                                String type, String dateReleased, float price,
+                                 int id, String desc, String review, boolean isBought)
+    {
+        int isB = (isBought ? 1 : 0);
+        ContentValues args = new ContentValues();
+        args.put(KEY_NAME, name); args.put(KEY_BRAND, brand);
+        args.put(KEY_WORD,keyword); args.put(KEY_TYPE,type);
+        args.put(KEY_DATERELEASED,dateReleased);
+        args.put(KEY_PRICE,price); args.put(KEY_DESC,desc);
+        args.put(KEY_REVIEW,review); args.put(KEY_BOUGHT,isB);
+        return db.update(DATABASE_TABLE_PRODUCT, args,
+                KEY_ID + "=" + id, null) > 0;
+    }
+
 }
