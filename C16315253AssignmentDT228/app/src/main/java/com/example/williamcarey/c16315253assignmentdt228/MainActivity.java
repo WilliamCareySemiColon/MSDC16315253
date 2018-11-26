@@ -2,6 +2,7 @@ package com.example.williamcarey.c16315253assignmentdt228;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,9 @@ public class MainActivity extends Activity implements View.OnClickListener
     //Person to get access to the person data
     public Person person;
 
+    //getting connection to the database itself
+    BackEndDatabase BEDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +31,8 @@ public class MainActivity extends Activity implements View.OnClickListener
 
         buttonColorSet = getColor(R.color.black);
         textFieldColorSet = getColor(R.color.white);
+
+        BEDB = new BackEndDatabase(getApplicationContext());
 
         textfields = new EditText[] {
                 findViewById(R.id.name),
@@ -38,10 +44,9 @@ public class MainActivity extends Activity implements View.OnClickListener
                 findViewById(R.id.password)
         };
 
+        //setting the colours of the textfield
         for(EditText t: textfields)
-        {
             t.setTextColor(textFieldColorSet);
-        }
 
         register = (Button)findViewById(R.id.register);
         register.setBackgroundColor(buttonColorSet);
@@ -73,11 +78,14 @@ public class MainActivity extends Activity implements View.OnClickListener
                     textfields[4].getText().toString(),
                     textfields[5].getText().toString(),
                     textfields[6].getText().toString(),
-                    getApplicationContext());
+                    BEDB);
 
             Toast.makeText(getApplicationContext(),
                     "You have pressed the register button",
                     Toast.LENGTH_SHORT).show();
+
+            //Intent intent = new Intent(MainActivity.this,home.class);
+            //startActivity(intent);
         }
     }
 }

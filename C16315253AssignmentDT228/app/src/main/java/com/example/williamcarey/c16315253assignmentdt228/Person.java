@@ -1,21 +1,17 @@
 package com.example.williamcarey.c16315253assignmentdt228;
 
-import android.content.Context;
-
 public class Person {
     private String name,address,username,email, password;
 
     //allow connection to the database
     private BackEndDatabase BEDB;
-    //variable to capture the context of the varaible
-    Context Databaseapplication;
 
     //insertion of data into the database
     long newPerson;
 
     //register constructor
     public Person(String name, String address1, String address2,String address3,
-                  String email,String username, String password, Context passed)
+                  String email,String username, String password, BackEndDatabase passed)
     {
         //setting the fields to have data
         this.name = name;
@@ -23,10 +19,8 @@ public class Person {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.Databaseapplication = passed;
 
-        BEDB = new BackEndDatabase(this.Databaseapplication);
-        BEDB.open();
+        BEDB = passed;
 
         newPerson = BEDB.insertPerson(this.username,this.password,this.name,
                 this.address,this.email);

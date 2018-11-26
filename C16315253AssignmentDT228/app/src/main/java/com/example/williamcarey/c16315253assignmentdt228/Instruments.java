@@ -37,7 +37,7 @@ public class Instruments extends Product {
     public Instruments(String name, String brand, String keyword,
                        String type, String dateReleased, String desc,
                        String generalReview, float price,
-                       Context context,String family,
+                       BackEndDatabase context,String family,
                        String sourcedFrom, String countryOrigin)
     {
         super(name, brand, keyword, type, dateReleased, desc,

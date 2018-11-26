@@ -19,7 +19,7 @@ public class CDRecord extends Product {
     public CDRecord(String name, String brand, String keyword,
                     String type, String dateReleased, String desc,
                     String generalReview, float price,
-                    Context context,String genre)
+                    BackEndDatabase context,String genre)
     {
         super(name, brand, keyword, type, dateReleased, desc,
                 generalReview, price, context);

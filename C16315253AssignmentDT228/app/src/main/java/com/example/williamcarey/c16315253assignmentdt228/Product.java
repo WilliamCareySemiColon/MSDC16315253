@@ -1,6 +1,5 @@
 package com.example.williamcarey.c16315253assignmentdt228;
 
-import android.content.Context;
 import android.database.Cursor;
 
 public class Product {
@@ -14,8 +13,7 @@ public class Product {
 
     //allow connection to the database
     private BackEndDatabase BEDB;
-    //variable to capture the context of the varaible
-    Context Databaseapplication;
+
 
     //autogenerate the id through the class itself
     private static int idgenerate = 1;
@@ -112,7 +110,7 @@ public class Product {
 
     public Product(String name, String brand, String keyword,
                    String type, String dateReleased, String desc,
-                   String generalReview, float price, Context context)
+                   String generalReview, float price, BackEndDatabase DB)
     {
         //settings all the parameters of the product to the fields passed in
         this.name = name;
@@ -127,18 +125,21 @@ public class Product {
         idgenerate++;
         this.isBought = false;
 
-        //getting the context
-        Databaseapplication = context;
+        BEDB = DB;
+    }
 
-        BEDB = new BackEndDatabase(Databaseapplication);
-        BEDB.open();
+    //second constructor just in case we want to deal with the database only
+    public Product(BackEndDatabase context)
+    {
+
+        BEDB = context;
     }
 
     //return a way to get access at the contents of the database
-    /*public Cursor getAllProducts()
+    public Cursor getAllProducts()
     {
-
-    }*/
+        return BEDB.getAllProduct();
+    }
 
     //planned methods - may not be implemented in this version
 
